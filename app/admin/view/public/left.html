@@ -1,0 +1,40 @@
+<div class="left_content">
+    <div class="login text_center ">
+        <a class="display_inline_block" href="{:url('./index')}">后台管理系统</a>
+        <span class="display_inline_block">V1.0.0</span>
+    </div>
+    <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="margin-right: 10px; margin-top: 10px">
+        {if condition='$menuData1'}
+        <li class="layui-nav-item {if condition=" $left_menu eq 1"}layui-nav-itemed{/if}">
+            <a href="javascript:;"><i class="iconfont icon-neirong"></i> 内容管理</a>
+            {volist name="menuData1" id="vo"}
+            <dl class="layui-nav-child">
+                <dd><a href="{:url($vo['name'])}">{$vo.title}</a></dd>
+            </dl>
+            {/volist}
+        </li>
+        {/if}
+
+        {if condition='$menuData2'}
+        <li class="layui-nav-item {if condition=" $left_menu eq 2"}layui-nav-itemed{/if}">
+            <a href="javascript:;"><i class="iconfont icon-tupian"></i> 广告管理</a>
+            {volist name="menuData2" id="vo"}
+            <dl class="layui-nav-child">
+                <dd><a href="{:url($vo['name'])}">{$vo.title}</a></dd>
+            </dl>
+            {/volist}
+        </li>
+        {/if}
+
+        {if condition='$menuData3'}
+        <li class="layui-nav-item {if condition=" $left_menu eq 3"}layui-nav-itemed{/if}">
+            <a href="javascript:;"><i class="iconfont icon-shezhi"></i> 系统管理</a>
+            {volist name="menuData3" id="vo"}
+            <dl class="layui-nav-child">
+                <dd><a href="{:url($vo['name'])}">{$vo.title}</a></dd>
+            </dl>
+            {/volist}
+        </li>
+        {/if}
+    </ul>
+</div>

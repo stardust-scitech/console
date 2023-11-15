@@ -192,3 +192,10 @@ body{
 .pagination .active{background-color: #009688;color: #fff;}  
 .pagination .disabled{color:#aaa;} 
 
+.layui-layer{
+    opacity: 0.8;
+}
+
+/* #layui-layer1{
+    margin-top: -250px;
+} */
