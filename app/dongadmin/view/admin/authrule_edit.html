@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    {include file="public/meta"}
+
+</head>
+<body>
+<article class="container">
+	{include file="public/left"}
+	<div class="right_content">
+		{include file="public/top"}
+		<div class="right_content_main">
+			<div class="right_content_main_box padding_20">
+				<form class="layui-form" action="" method="post">
+					<div class="layui-form-item">
+						<label class="layui-form-label">上级规则</label>
+						<div class="layui-input-block">
+						  <select name="parent_id" class="public_select">
+	  
+							<option value="0">顶级权限</option>
+							{volist name="$ruleDataTree" id="vo"}
+							<option value="{$vo.id}" {if condition="$ruleData['parent_id'] eq $vo['id']"}selected=selected{/if}><?php echo str_repeat('-', $vo['level']*6)?>{$vo.title}</option>
+							{/volist}
+	  
+						  </select>
+						</div>
+					  </div>
+					
+					  <div class="layui-form-item">
+						<label class="layui-form-label">规则名</label>
+						<div class="layui-input-block">
+						  <input type="text" name="title" class="layui-input" value="{$ruleData.title}">
+						  <input type="hidden" class="input-text" value="{$ruleData.id}" placeholder="" name="id" required="true">
+						</div>
+					  </div>
+					  <div class="layui-form-item">
+						<label class="layui-form-label">规则</label>
+						<div class="layui-input-block">
+						  <input type="text" name="name" class="layui-input" value="{$ruleData.name}">
+						</div>
+					  </div>
+					  <div class="layui-form-item">
+						<label class="layui-form-label">板块</label>
+						<div class="layui-input-block">
+							<select name="type" class="public_select">
+	  
+								<option value="0" {if condition="$ruleData['type'] eq 0"}selected=selected{/if}>首页</option>
+								<option value="1" {if condition="$ruleData['type'] eq 1"}selected=selected{/if}>板块1</option>
+								<option value="2" {if condition="$ruleData['type'] eq 2"}selected=selected{/if}>板块2</option>
+								<option value="3" {if condition="$ruleData['type'] eq 3"}selected=selected{/if}>板块3</option>
+								
+							  </select>
+						</div>
+					  </div>
+					  <div class="layui-form-item">
+						<label class="layui-form-label">是否启用</label>
+						<div class="layui-input-block">
+						  <input type="radio" name="status" value="1" {if condition='$ruleData.status eq 1'}checked{/if}> <label for="checkbox-pinglun">是</label>&nbsp;&nbsp;
+						  <input type="radio" name="status" value="0" {if condition='$ruleData.status eq 0'}checked{/if}> <label for="checkbox-pinglun">否</label>&nbsp;&nbsp;
+						</div>
+					  </div>
+					  <div class="layui-form-item text_center">
+						<button class="layui-btn" type="submit">立即提交</button>
+					  </div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</article>
+
+{include file="public/foot" /}
+<style>
+    .layui-form-radio{
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+
+</body>
+</html>

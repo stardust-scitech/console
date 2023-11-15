@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    {include file="public/meta"}
+
+</head>
+<body>
+
+<div class="container">
+	{include file="public/left"}
+	<div class="right_content">
+		{include file="public/top"}
+		<div class="right_content_main">
+			<div class="mar_t_15">
+				<form class="public_search_form mar_b_30" method="post" action="" target="_self">
+					<input type="text" class="layui-input fleft" style="width:250px" placeholder="{$searchkey|default='权限名称'}" id="" name="searchkey">
+					<button type="submit" class="layui-btn fleft" id="" name=""> 搜权限节点</button>
+				</form>
+			</div>
+			<div class="mar_t_15"> <a href="{:url('authrule/add')}" class="layui-btn ">添加权限节点</a></div>
+			<div class="mar_t_15">
+				<table class="layui-table">
+					<thead>
+		
+						<tr>
+							<th width="40">+</th>
+							<th width="40">ID</th>
+							<th width="200">权限名称</th>
+							<th width="100">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{volist name="$ruleDataTree" id="vo"}
+						<tr id="{$vo.id}" parentid="{$vo.parent_id}">
+							<td><span class="open">+</span></td>
+							<td>{$vo.id}</td>
+							<td style="text-align: left;{if condition='$vo.level eq 0'}font-weight:bold;{/if}{if condition='$vo.status eq 0'}text-decoration:line-through;{/if}"><?php echo str_repeat('-', $vo['level']*6)?>{$vo.title}</td>
+							<td><a title="编辑" href="{:url('authrule/edit',array('id'=>$vo.id))}"><i class="layui-icon layui-icon-edit"></i></a> <a onClick="public_del('{:url('authrule/del', ['id'=>$vo.id])}')" href="javascript:;"  title="删除"><i class="layui-icon layui-icon-delete"></i></a></td>
+						</tr>
+						{/volist}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+{include file="public/foot" /}
+
+<script>
+//伸缩状态js
+$('tr[parentid!=0]').hide();
+           $('.open').click(function(){
+               var id=$(this).parents('tr').attr('id');
+               if($(this).text()=='+'){
+                   $(this).text('-');
+                   $('tr[parentid='+id+']').show();
+               }else{
+                   $(this).text('+');
+                   $('tr[parentid='+id+']').hide();
+               }
+           });
+
+</script>
+</body>
+</html>

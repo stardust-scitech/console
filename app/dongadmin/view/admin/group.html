@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    {include file="public/meta"}
+
+</head>
+
+<body>
+
+<div class="container">
+	{include file="public/left"}
+	<div class="right_content">
+		{include file="public/top"}
+		<div class="right_content_main">
+			<div class="right_content_main_box padding_20">
+				<span class="layui-breadcrumb">
+					<a href="{:url('index/index')}">首页</a>
+					<a><cite>用户组列表</cite></a>
+				</span>
+				<div class="mar_t_15">
+					<a class="layui-btn " href="{:url('AuthGroup/add')}">+添加用户组</a>
+				</div>
+				<div class="mar_t_15">
+					<table class="layui-table ">
+						<thead>
+				
+							<tr class="text-c">
+								<th width="40">ID</th>
+								<th width="200">用户组名称</th>
+								<!-- <th width="200">状态</th> -->
+								<th width="70">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							{volist name="$authGroupData" id="vo"}
+							<tr class="text-c">
+								<td>{$vo.id}</td>
+								<td>{$vo.title}</td>
+								<!-- <td>
+									{if condition="$vo.status neq 1"}
+									<a href="{:url('base/status',array('id'=>$vo.id,'model'=>'auth_group','status'=>1))}" style="color: #f00;">禁用</a>
+									{else/}
+									<a href="{:url('base/status',array('id'=>$vo.id,'model'=>'auth_group','status'=>0))}" style="color: #009688;">在用</a>
+									{/if}
+								</td> -->
+								<td class="f-14"><a title="权限" href="{:url('AuthGroup/power',array('id'=>$vo.id))}"  style="text-decoration:none"><i class="layui-icon layui-icon-note"></i></a> <a title="编辑" href="{:url('AuthGroup/edit',array('id'=>$vo.id))}"><i class="layui-icon layui-icon-edit"></i></a> <a onClick="public_del('{:url('AuthGroup/del', ['id'=>$vo.id])}')" href="javascript:;"  title="删除"><i class="layui-icon layui-icon-delete"></i></a></td>
+							</tr>
+							{/volist}
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+{include file="public/foot" /}
+
+</body>
+</html>

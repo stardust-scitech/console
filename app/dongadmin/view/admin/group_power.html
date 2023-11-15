@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    {include file="public/meta"}
+
+</head>
+
+<body>
+    <article class="container">
+        {include file="public/left"}
+        <div class="right_content">
+            {include file="public/top"}
+            <div class="right_content_main">
+                <div class="right_content_main_box padding_20">
+                    <div class="mar_t_15">
+                        <form class="form form-horizontal" id="form-admin-add" action="" method="post">
+
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户组名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" class="layui-input" value="{$authGroupData.title}" placeholder=""
+                                        name="title" required="true">
+                                    <input type="hidden" class="layui-input" value="{$authGroupData.id}" placeholder=""
+                                        name="id" required="true">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">分配权限</label>
+                                <div class="layui-input-block">
+                                    <!-- 权限分配 -->
+                                    <input id="chkAll" type="checkbox" name="check" class="">
+                                    <span class="text">权限全选</span>
+                                    <table style="margin-left: 15px;" class="table">
+
+                                        <tbody>
+                                            {foreach name="data" item="vo"}
+                                            <tr>
+                                                <td>
+                                                    <label style="padding-right:15px;">
+                                                        <input id="{$vo.id}" value="{$vo.id}" name="rules[]"
+                                                            dataid="id-{$vo.id}"
+                                                            <?php if(in_array($vo['id'], $rules)){ echo 'checked="checked"';}?>
+                                                            class="colored-success checkbox-parent" type="checkbox">
+                                                        <span class="text">{$vo.title}</span>
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            {foreach name="vo['children']" item="vo2"}
+                                            <tr>
+                                                <td style="padding-left:30px;">
+                                                    <label style="padding-right:15px;">
+                                                        <input
+                                                            <?php if(in_array($vo2['id'], $rules)){ echo 'checked="checked"';}?>
+                                                            class="colored-success checkbox-parent checkbox-child"
+                                                            id="{$vo2.id}" value="{$vo2.id}" name="rules[]"
+                                                            dataid="id-{$vo.id}-{$vo2.id}" type="checkbox">
+                                                        <span class="text">{$vo2.title}</span>
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            {if condition="$vo2['children']"}
+                                            <tr>
+                                                <td style="padding-left:60px;">
+                                                    {foreach name="vo2['children']" item="vo3"}
+                                                    <label style="padding-right:15px;">
+                                                        <input
+                                                            <?php if(in_array($vo3['id'], $rules)){ echo 'checked="checked"';}?>
+                                                            class="colored-success checkbox-child" id="{$vo3.id}"
+                                                            value="{$vo3.id}" name="rules[]"
+                                                            dataid="id-{$vo.id}-{$vo2.id}-{$vo3.id}" type="checkbox">
+                                                        <span class="text">{$vo3.title}</span>
+                                                    </label>
+                                                    {/foreach}
+                                                </td>
+                                            </tr>
+                                            {/if}
+                                            {/foreach}
+                                            {/foreach}
+                                        </tbody>
+                                    </table>
+                                    <!-- 权限分配 -->
+                                </div>
+                            </div>
+
+
+                            <div class="layui-form-item text_center">
+                                <button class="layui-btn" type="submit">立即提交</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </article>
+
+    {include file="public/foot" /}
+
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" src="/public/static/admin2/jquery.validation/1.14.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="/public/static/admin2/jquery.validation/1.14.0/validate-methods.js"></script>
+    <script type="text/javascript" src="/public/static/admin2/jquery.validation/1.14.0/messages_zh.js"></script>
+    <script type="text/javascript">
+        /* 权限配置 */
+        $(function () {
+            //动态选择框，上下级选中状态变化
+            $('input.checkbox-parent').on('change', function () {
+                var dataid = $(this).attr("dataid");
+                $('input[dataid^=' + dataid + ']').prop('checked', $(this).is(':checked'));
+            });
+            $('input.checkbox-child').on('change', function () {
+                var dataid = $(this).attr("dataid");
+                dataid = dataid.substring(0, dataid.lastIndexOf("-"));
+                var parent = $('input[dataid=' + dataid + ']');
+                if ($(this).is(':checked')) {
+                    parent.prop('checked', true);
+                    //循环到顶级
+                    while (dataid.lastIndexOf("-") != 2) {
+                        dataid = dataid.substring(0, dataid.lastIndexOf("-"));
+                        parent = $('input[dataid=' + dataid + ']');
+                        parent.prop('checked', true);
+                    }
+                } else {
+                    //父级
+                    if ($('input[dataid^=' + dataid + '-]:checked').length == 0) {
+                        parent.prop('checked', false);
+                        //循环到顶级
+                        while (dataid.lastIndexOf("-") != 2) {
+                            dataid = dataid.substring(0, dataid.lastIndexOf("-"));
+                            parent = $('input[dataid=' + dataid + ']');
+                            if ($('input[dataid^=' + dataid + '-]:checked').length == 0) {
+                                parent.prop('checked', false);
+                            }
+                        }
+                    }
+                }
+            });
+
+            $('#chkAll').on('click', function () {
+                if ($(this).is(':checked')) {
+                    $(".table").find("input:checkbox").prop('checked', true);
+                } else {
+                    $(".table").find("input:checkbox").prop('checked', false);
+                }
+            });
+        });
+    </script>
+    <!--/请在上方写此页面业务相关的脚本-->
+</body>
+
+</html>

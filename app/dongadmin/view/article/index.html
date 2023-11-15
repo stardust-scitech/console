@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    {include file="public/meta"}
+
+</head>
+
+<body>
+
+
+    <div class="container">
+        {include file="public/left"}
+        <div class="right_content">
+                {include file="public/top"}
+            <div class="right_content_main">
+                <div class="welcome padding_20">
+                    <p><h1>我是文章管理首页</h1></p>
+                    <p><br></p>
+                    <p><h1><a href="{:url('article/add')}">添加文章</a></h1></p>
+                    <p><br></p>
+                    <p><h1><a href="{:url('article/edit')}">编辑文章</a></h1></p>
+                    <p><br></p>
+                    <p><h1><a href="{:url('article/delete')}">删除文章</a></h1></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {include file="public/foot"}
+
+
+
+
+</body>
+
+</html>
