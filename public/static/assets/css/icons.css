@@ -544,7 +544,8 @@ File: icons.css
 }
 
 .bx-arrow-to-left:before {
-	content: "\e91d"
+	content: "\e91d";
+	fill:red
 }
 
 .bx-arrow-to-right:before {

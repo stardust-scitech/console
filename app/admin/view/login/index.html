@@ -17,10 +17,10 @@
                 <!-- target="postFrame" -->
                 <h2 class="text_center mar_b_30">后台登录</h2>
                 <div class="layui-form-item">
-                        <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                        <input id="username" type="text" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-item">
-                        <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                        <input id="password" type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-item">
                     <input id="verifycode" type="text" name="verifycode" required lay-verify="required" placeholder="请输入两位验证码" autocomplete="off" class="layui-input fleft" style="width: 200px">
@@ -43,7 +43,7 @@
                 {
                     $("#form").ajaxSubmit(function(data)
                     { 
-                        console.log(data);
+                        // console.log(data);
                         var json = JSON.parse(data);
 
                         if(json.redirect == './index') 
@@ -59,16 +59,76 @@
                                 document.getElementById("captcha").src = json.captcha;
                                 // <img id="captcha" src="{:captcha_src()}" alt="captcha" onClick="this.src='{:captcha_src()}?'+Math.random();"/>
                             }
-                            // $("#captcha").attr('src','{:captcha_src()}?tm='+Math.random());//刷新验证码
                         }
                         // $(this).resetForm(); // 提交后重置表单
                     });
                     return false; // 必须返回false，否则表单会自己再做一次提交操作，并且页面跳转
                 }
 
+                // document.getElementById("verifycode").focus();
+
+                var focus_count = 0;
+                var verifycode = document.getElementById("verifycode");
+                var password = document.getElementById("password");
+                var username = document.getElementById("username");
+
+                verifycode.focus();
+
+                verifycode.addEventListener("focus", function(e) {
+                    focus_count = 0;
+                });
+                password.addEventListener("focus", function(e) {
+                    if(e.relatedTarget) focus_count = 1;
+                });
+                username.addEventListener("focus", function(e) {
+                    if(e.relatedTarget) focus_count = 2;
+                });
+
                 document.onkeydown = (e) => {
-                    if(e.keyCode == 13) {
-                        document.getElementById("submit").click();
+                    // console.log(e.key);
+                    switch (e.key) {
+                        case "Enter":
+                            document.getElementById("submit").click();
+                            break;    
+                        case "ArrowUp":
+                        case "ArrowDown":
+                            {
+                                event.preventDefault();
+
+                                if(e.key == "ArrowUp")
+                                {
+                                    if(focus_count<2) focus_count++;
+                                    else focus_count = 0;
+                                }
+                                else if(e.key == "ArrowDown")
+                                {
+                                    if(focus_count>0) focus_count--;
+                                    else focus_count = 2;
+                                }
+
+                                switch (focus_count) {
+                                    case 0:
+                                        verifycode.focus();
+                                        break;
+                                    case 1:
+                                        password.focus();
+                                        password.select();
+                                        // setTimeout(function(){password.select();},0); 
+                                        break;
+                                    case 2:
+                                        username.focus();
+                                        username.select();
+                                        break;
+                                }
+                            }
+                            break;
+                        case "Control":
+                            if(!focus_count)
+                            {
+                                $("#captcha").attr('src','{:captcha_src()}?'+Math.random()); // 刷新验证码
+                                verifycode.value = '';
+                            }
+                            break;
                     }
                 }
 
